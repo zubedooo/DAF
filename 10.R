@@ -1,34 +1,21 @@
-set.seed(123456789)
-
-n <- 16
-
-probabilisticCounting = function(stream) {
-	bits <- rep(0, n)
-	for (s in stream) {
-		bits[p(binary(hash(s)))] <- 1
-	}
-	print(bits)
-	return (1/0.7735 * 2^p(bits))
+x<-c("Hello","world","Ralph","Internet")
+x<-as.numeric(as.factor(x))
+print(x)
+h<-function(var){
+  return ((6*var+1)%%5)
 }
-
-hash <- function(x) {
-	 # get around 32-bit limitation - using substr
-	strtoi(substr(digest(x, algo="crc32"), 0, 7), 16L)
+H<-c()
+for(i in 1:length(x)){
+  H[i]<-h(x[i])
 }
-
-# position of first bit equal 0
-p <- function(b) {
-	zeroIndex <- which(b != 1)
-	firstZero <- min(zeroIndex)
-	return(firstZero)
+b<-function(var){
+  l1=as.numeric(intToBits(var))
+  index<-match(1,l1)-1
+  return (index)
 }
-
-binary <- function(x) {
-	b <- rev(as.numeric(intToBits(x)))
-	# get around 32-bit limitation
-	b <- tail(b, 16) 
-	return(b)
+B<-c()
+for(i in 1:length(H)){
+  B[i]<-b(H[i])
 }
-
-stream = as.integer(runif(10000, 0, 2^n))
-probabilisticCounting(stream)
+B[is.na(B)]<-0
+print(2^max(B))
