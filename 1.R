@@ -1,9 +1,9 @@
 setwd("C:\\Users\\gaura\\OneDrive\\Documents\\DA_Final_Lab")
-lr<-read.csv("12.csv",header=TRUE,sep=",")
+lr<-read.csv("1.csv",header=TRUE,sep=",")
 lr
 
-x<-lr$subject1
-y<-lr$subject2
+x<-lr$experience
+y<-lr$publications
 
 X <- mean(x)
 X
