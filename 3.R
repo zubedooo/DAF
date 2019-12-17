@@ -1,6 +1,9 @@
 bank<-read.csv("3.csv",header=TRUE,sep=",")
 summary(bank)
 
+x=100
+y=2000
+
 dis <- transform(bank, distance= sqrt((x-bank$age)^2+(y-bank$loan)^2 ) )
 dis
 odis<- dis[order(dis$distance),c(3,4)]
