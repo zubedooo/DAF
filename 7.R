@@ -34,6 +34,8 @@ pred2 = predict(model2,newdata = test)
 pred2
 table(pred2$class,default)
 
-model2
+
+ldahist(pred1$x[,1], g= pred1$class)
+
 par(mfrow=c(1,1))
-plot(model2$x[,1], model2$class, col=test$default)
+plot(pred2$x[,1], pred2$class, col=test$default)
