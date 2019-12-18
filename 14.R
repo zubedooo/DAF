@@ -61,7 +61,7 @@ for(i in 1:length(test_set)){
   {
     if(test_set[i] %in% URL_notclicked)
     {
-      cat(test_set[i]," this is clicked ","\n")
+      cat(test_set[i]," this is false positive ","\n")
     }
     else
     {
