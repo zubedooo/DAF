@@ -33,3 +33,6 @@ pred4 = predict(model3,newdata = test)
 pred4
 table(pred4$class,default)
 
+
+par(mfrow=c(1,1))
+plot(pred4$posterior[,2], pred4$class, col=test$default)
