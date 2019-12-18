@@ -21,12 +21,7 @@ get_hash = function(item,seed){
                  algo="murmur32",
                  serialize=F,
                  seed=seed)
-  print("hex_str")
-  print(hex_str)
   hex=paste('0x',hex_str,sep="")
-  print("hex")
-  print(hex)
-  print(as.numeric(hex) %% m)
   return(as.numeric(hex) %% m)
   
   
