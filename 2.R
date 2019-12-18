@@ -1,4 +1,3 @@
-setwd("C:\\Users\\gaura\\OneDrive\\Documents\\DA_Final_Lab")
 lr<-read.csv("2.csv",header=TRUE,sep=",")
 lr
 
