@@ -1,21 +1,43 @@
-df=read.csv("4.csv",header=TRUE,sep=",")
+lr<-read.csv("4.csv",header=TRUE,sep=",")
+lr
 
-#using inbuilt functions
+x<-lr$budget
+y<-lr$sales
+x
+y
 
-lr.model=lm(sales~budget,data=df)
-test=data.frame(budget=df$budget)
-lr.pred=predict(lr.model,test)
-plot(df$budget,df$sales)
-lines(df$budget,lr.pred)
-lr.model
-#without using prebuilt functions
+X <- mean(x)
+X
+Y <- mean(y)
+Y
 
-budget_mean=mean(df$budget)
-sale_mean=mean(df$sales)
-m1=sum((df$budget-budget_mean)*(df$sales-sale_mean))/sum((df$budget-budget_mean)^2)
-m1
-m0=sale_mean-budget_mean*m1
-m0
-pred=m0+df$budget*m1
-plot(df$budget,df$sales)
-lines(df$budget,pred)
+num = sum((x-X)*(y-Y))
+dem = sum((x-X)^2)
+
+b1 = num/dem
+b0 = Y - b1*X
+b1
+b0
+lr$pred = b0 + b1*x
+lr
+rss = sum((y-lr$pred)^2)
+rss
+tss = sum((y-Y)^2)
+tss
+rse = sqrt(rss/(nrow(lr)-2))
+rse
+se = 1 -  (rss/tss)
+se
+
+
+fit <- lm(y~x,lr)
+summary(fit)
+
+lr$pred2 = predict(fit,data.frame(x=c(x)))
+lr
+
+
+plot(x,y)
+lines(x,lr$pred)
+lines(x,lr$pred2)
+
