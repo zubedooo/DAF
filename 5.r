@@ -1,22 +1,46 @@
-df=read.csv("5.csv",header=TRUE,sep=",")
-df
+lr<-read.csv("5.csv",header=TRUE,sep=",")
+lr
 
-#using inbuilt functions
+x1 <- lr$TV
+x2 <- lr$radio
+y <- lr$newspaper
 
-mlr.model=lm(Sales~TV+Radio,data=df)
-test=data.frame(TV=df$TV,Radio=df$Radio)
-mlr.pred=predict(mlr.model,test)
-mlr.model
+X1 <- mean(x1)
+X2 <- mean(x2)
+Y <- mean(y)
 
-#without inbuilt functions
+num1 = sum((x1-X1)*(y-Y))
+dem1 = sum((x1-X1)^2)
+b1 = num1/dem1
+b1
 
-tv_mean=mean(df$TV)
-radio_mean=mean(df$Radio)
-sales_mean=mean(df$Sales)
-m1=sum((df$TV-tv_mean)*(df$Sales-sales_mean))/sum((df$TV-tv_mean)**2)
-m1
-m2=sum((df$Radio-radio_mean)*(df$Sales-sales_mean))/sum((df$Radio-radio_mean)**2)
-m2
-m0=sales_mean-m1*tv_mean-m2*radio_mean
-m0
-pred=m0+df$TV*m1+df$Radio*m2
+num2 = sum((x2-X2)*(y-Y))
+dem2 = sum((x2-X2)^2)
+b2 = num2/dem2
+b2
+
+b0 = Y - b1*X1 - b2*X2
+b0
+
+lr$pred = b0 + b1*x1 + b2*x2
+lr
+
+
+rss = sum((y-lr$pred)^2)
+rss
+tss = sum((y-Y)^2)
+tss
+rse = sqrt(rss/(nrow(lr)-2))
+rse
+se = 1 -  (rss/tss)
+se
+
+mod1 <-lm(y~x1+x2,data=lr)
+summary(mod1)
+lr$pred2 <- predict(mod1,data.frame(x1=c(x1),x2=c(x2)))
+                                     
+lr
+summary(lr)
+plot(lr$pred,y)
+plot(lr$pred,y,xlab="predicted",ylab="actual")
+abline(a=0,b=1)
