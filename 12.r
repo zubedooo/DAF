@@ -1,24 +1,41 @@
-df=read.csv("12.csv",header=TRUE,sep=",")
+lr<-read.csv("12.csv",header=TRUE,sep=",")
+lr
 
-#Using predefined functions
+x<-lr$subject1
+y<-lr$subject2
 
-lr.model=lm(subject2~subject1,data = df)
-test=data.frame(subject1=df$subject1)
-lr.pred=predict(lr.model,test)
-plot(test$subject1,df$subject2,col="blue")
-lines(test$subject1,lr.pred,col="red")
 
-#Without Prebuilt functions
+X <- mean(x)
+X
+Y <- mean(y)
+Y
 
-exp_mean=mean(df$subject1)
-pub_mean=mean(df$subject2)
-m1=sum((df$subject1-exp_mean)*(df$subject2-pub_mean))/sum((df$subject1-exp_mean)^2)
-m0=pub_mean-exp_mean*m1
-pred=m0+m1*df$subject1
-plot(df$subject1,df$subject2)
-lines(df$subject1,pred)
+num = sum((x-X)*(y-Y))
+dem = sum((x-X)^2)
 
-rss=sum((df$subject1-pred)^2)
-tss=sum((df$subject2-pub_mean)^2)
-se=1-(rss/tss)
-rse=(rss/(nrow(df)-2))
+b1 = num/dem
+b0 = Y - b1*X
+b1
+b0
+lr$pred = b0 + b1*x
+lr
+rss = sum((y-lr$pred)^2)
+rss
+tss = sum((y-Y)^2)
+tss
+rse = sqrt(rss/(nrow(lr)-2))
+rse
+se = 1 -  (rss/tss)
+se
+
+
+fit <- lm(y~x,lr)
+summary(fit)
+
+lr$pred2 = predict(fit,data.frame(x=c(x)))
+lr
+
+
+plot(x,y)
+lines(x,lr$pred)
+lines(x,lr$pred2)
