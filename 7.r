@@ -1,22 +1,41 @@
-df=read.csv("7.csv",header=TRUE,sep=",")
-df
-#Not required but improves results, kinda
-#mins=apply(df[,4:5],2,min)
-#maxs=apply(df[,4:5],2,max)
-
-#dataset=as.data.frame(scale(df[,4:5],center = mins,scale = (maxs-mins)))
-#dataset$default=as.factor(df$default)
-#dataset$student=as.factor(df$student)
-
-#str(dataset)
-#df=dataset
-index=sample(1:nrow(df),round(nrow(df)*0.6))
-df_train=df[index,]
-df_test=df[-index,]
-df_train
 library(MASS)
-model=lda(default~student+balance+income,data=df_train)
-model
-pred=predict(model,newdata = df_test)
-pred$class
-table(actual=df_test$default,pred=pred$class)
+library(ggplot2)
+data = read.csv("7.csv")
+
+dim(data)
+str(data)
+summary(data)
+
+attach(data)
+data
+
+
+set.seed(1)
+row.number = sample(1:nrow(data),0.6*nrow(data))
+row.number
+train = data[row.number,]
+test = data[-row.number,]
+
+dim(train)
+dim(test)
+
+attach(train)
+
+model2 = lda(default~student+balance+income,data=train)
+model2
+summary(model2)
+
+attach(train)
+pred1 = predict(model2,data = train)
+table(pred1$class,default)
+
+attach(test)
+pred2 = predict(model2,newdata = test)
+pred2
+table(pred2$class,default)
+
+
+ldahist(pred1$x[,1], g= pred1$class)
+
+par(mfrow=c(1,1))
+plot(pred2$x[,1], pred2$class, col=test$default)
