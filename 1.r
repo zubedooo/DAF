@@ -1,24 +1,40 @@
-df=read.csv("1.csv",header=TRUE,sep=",")
+lr<-read.csv("1.csv",header=TRUE,sep=",")
+lr
 
-#Using predefined functions
+x<-lr$experience
+y<-lr$publications
 
-lr.model=lm(publications~experience,data = df)
-test=data.frame(experience=df$experience)
-lr.pred=predict(lr.model,test)
-plot(test$experience,df$publications,col="blue")
-lines(test$experience,lr.pred,col="red")
+X <- mean(x)
+X
+Y <- mean(y)
+Y
 
-#Without Prebuilt functions
+num = sum((x-X)*(y-Y))
+dem = sum((x-X)^2)
 
-exp_mean=mean(df$experience)
-pub_mean=mean(df$publications)
-m1=sum((df$experience-exp_mean)*(df$publications-pub_mean))/sum((df$experience-exp_mean)^2)
-m0=pub_mean-exp_mean*m1
-pred=m0+m1*df$experience
-plot(df$experience,df$publications)
-lines(df$experience,pred)
+b1 = num/dem
+b0 = Y - b1*X
+b1
+b0
+lr$pred = b0 + b1*x
+lr
+rss = sum((y-lr$pred)^2)
+rss
+tss = sum((y-Y)^2)
+tss
+rse = sqrt(rss/(nrow(lr)-2))
+rse
+se = 1 -  (rss/tss)
+se
 
-rss=sum((df$publications-pred)^2)
-tss=sum((df$publications-pub_mean)^2)
-se=1-(rss/tss)
-rse=(rss/(nrow(df)-2))
+
+fit <- lm(y~x,lr)
+summary(fit)
+
+lr$pred2 = predict(fit,data.frame(x=c(x)))
+lr
+
+
+plot(x,y)
+lines(x,lr$pred)
+lines(x,lr$pred2)
