@@ -3,7 +3,7 @@ lr
 
 x1 <- lr$TV
 x2 <- lr$radio
-y <- lr$newspaper
+y <- lr$sales
 
 X1 <- mean(x1)
 X2 <- mean(x2)
