@@ -1,60 +1,74 @@
 library(digest)
-library(bit)
 
-BloomFilter=setRefClass(
-  "BloomFilter",
-  fields=list(
-    .fp_prob="numeric",
-    .size="integer",
-    .hash_size="integer",
-    .bit_array="ANY"
-  ),
-  methods = list(
-    initialize=function(num_items,fp_prob)
+n=10
+m=100
+nh=4
+l = rep(0,m)
+l
+
+user=c('zubin','gaurav','dhanush','dani','tommy','zaid','danny','random1','goodie','radler')
+
+print(user)
+
+notuser=c('hacker','notauser','boom','murray','killer','killbill','goku','hacker2','iamone','hacker3')
+
+print(notuser)
+
+get_hash = function(item,seed){
+  hex_str=digest(object=item,
+                 algo="murmur32",
+                 serialize=F,
+                 seed=seed)
+  hex=paste('0x',hex_str,sep="")
+  return(as.numeric(hex) %% m)
+  
+  
+}
+
+add = function(item){
+  for (i in 1:nh){
+    hash_digest=get_hash(item,i)
+    hash_digest=hash_digest+1
+    l[hash_digest]<<-1
+  }
+}
+
+check = function(item){
+  for(i in 1:nh){
+    hash_digest=get_hash(item,i)
+    hash_digest=hash_digest+1
+    if(l[hash_digest] == 0)
     {
-      .fp_prob<<-fp_prob
-      .size<<-get_size(num_items,fp_prob)
-      .hash_size<<-get_hash_size(.size,num_items)
-      .bit_array<<-bit(.size)
-    },
-    get_size=function(n,p)
-    {
-      m=-(n*log(p))/(log(2)^2)
-      return(as.integer(m))
-    },
-    get_hash_size=function(m,n)
-    {
-      k=(m/n)*log(2)
-      return(as.integer(k))
-    },
-    get_hash=function(item,seed)
-    {
-      hash_digest=digest(object=item,serialize = F,seed=seed,algo = "murmur32")
-      fin=paste("0x",hash_digest,sep="")
-      return(as.numeric(fin)%%.size)
-    },
-    add=function(item)
-    {
-      for(i in 1:.hash_size)
-      {
-        .bit_array[get_hash(item,i)]<<-TRUE
-      }
-    },
-    check=function(item)
-    {
-      for(i in 1:.hash_size)
-      {
-        if(.bit_array[get_hash(item,i)]==FALSE)
-          return(FALSE)
-      }
-      return(TRUE)
+      return(FALSE)
     }
-  )
-)
-x<-readline(prompt="Enter a name to add: ")
-bloom=BloomFilter$new(20,0.05)
-bloom$.size
-bloom$.hash_size
-bloom$add(x)
-bloom$check('barry')
-bloom$check('harry')
+  }
+  return(TRUE)
+  
+}
+
+for(i in 1:n){
+  add(user[i])
+}
+
+print(l)
+test_set=c(user[1:5],notuser)
+print(test_set)
+
+for(i in 1:length(test_set)){
+  if(check(test_set[i]))
+  {
+    if(test_set[i] %in% notuser)
+    {
+      cat(test_set[i]," this is false positive ","\n")
+    }
+    else
+    {
+      cat(test_set[i]," this is probably a user ","\n")
+    }
+  }
+  else
+  {
+    cat(test_set[i]," this is not a user !","\n")
+  }
+}
+l
