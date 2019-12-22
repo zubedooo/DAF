@@ -1,21 +1,49 @@
-x<-c("Hello","world","Ralph","Internet")
-x<-as.numeric(as.factor(x))
-print(x)
-h<-function(var){
-  return ((6*var+1)%%5)
+x=c(1,2,3,4,5,6,7,8,9,10)
+
+hash=function(var)
+{
+  return((6*var+1)%%23)
 }
-H<-c()
-for(i in 1:length(x)){
-  H[i]<-h(x[i])
+
+tobit=function(var)
+{
+  val=intToBits(var)
+  val=paste(as.integer(val),collapse="")
+  return(val)
 }
-b<-function(var){
-  l1=as.numeric(intToBits(var))
-  index<-match(1,l1)-1
-  return (index)
+
+max=0
+count_max=function(var)
+{
+  count=0
+  var=strsplit(var,split="")
+  for(i in 1:length(var[[1]]))
+  {
+    if(var[[1]][i]!=1)
+    {
+      count=count+1
+    }
+  }
+  return(32-count)
 }
-B<-c()
-for(i in 1:length(H)){
-  B[i]<-b(H[i])
+
+
+h=c()
+for(i in 1:length(x))
+{
+  temp=hash(x[i])
+  h[i]=temp
 }
-B[is.na(B)]<-0
-print(2^max(B))
+bin=c()
+for(i in 1:length(x))
+{
+  temp=tobit(h[i])
+  bin[i]=temp
+}
+for(i in 1:length(bin))
+{
+  c=count_max(bin[i])
+  if(c>max)
+    max=c
+}
+2^max
