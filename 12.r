@@ -2,8 +2,8 @@ df=read.csv("12.csv",header=TRUE,sep=",")
 
 #Using predefined functions
 
-lr.model=lm(subject1~subject2,data = df)
-test=data.frame(subject2=df$subject2)
+lr.model=lm(subject2~subject1,data = df)
+test=data.frame(subject1=df$subject1)
 lr.pred=predict(lr.model,test)
 plot(test$subject1,df$subject2,col="blue")
 lines(test$subject1,lr.pred,col="red")
